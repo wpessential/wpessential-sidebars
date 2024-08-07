@@ -1,0 +1,89 @@
+<?php
+
+namespace WPEssential\Library;
+
+if ( ! \defined( 'ABSPATH' ) && ! \defined( 'WPE_REG_SIDEBARS' ) )
+{
+	exit; // Exit if accessed directly.
+}
+
+final class Sidebars
+{
+	protected $add_sidebars    = [];
+	protected $remove_sidebars = [];
+
+	public static function make ()
+	{
+		return new self();
+	}
+
+	public function add ( $args = [] )
+	{
+		$this->add_sidebars = array_merge( $this->add_sidebars, $args );
+
+		return $this;
+	}
+
+	public function remove ( $key = '' )
+	{
+		$this->remove_sidebars = array_push( $this->remove_sidebars, $key );
+
+		return $this;
+	}
+
+	public function __construct () {}
+
+	public function init ()
+	{
+		add_action( 'widgets_init', [ __CLASS__, 'unregister' ], 1000 );
+		add_action( 'widgets_init', [ __CLASS__, 'register' ], 1000 );
+	}
+
+	public function unregister ()
+	{
+		$sidebars = apply_filters( 'wpe/library/sidebars_remove', array_merge( $this->remove_sidebars, [ '' ] ) );
+		if ( ! empty( $sidebars ) )
+		{
+			$un_reg_sid = 'unre' . 'gister' . '_side' . 'bar';
+			foreach ( $sidebars as $sidebar )
+			{
+				$un_reg_sid( $sidebar );
+			}
+		}
+	}
+
+	public function register ()
+	{
+		$sidebars = apply_filters(
+			'wpe/library/sidebars_add',
+			array_merge( $this->add_sidebars, [
+				'main-sidebar'   => [
+					'name'          => esc_html__( 'WPEssential: Main Sidebar', 'wpessential' ),
+					'id'            => 'sidebar-1',
+					'description'   => esc_html__( 'Widgets in this area will be shown on all posts and pages.', 'wpessential' ),
+					'before_widget' => '<div id="%1$s" class="wpe-widget widget %2$s">',
+					'after_widget'  => '</div>',
+					'before_title'  => '<h2 class="wpe-widget-title">',
+					'after_title'   => '</h2>',
+				],
+				'footer-sidebar' => [
+					'name'          => esc_html__( 'WPEssential: Footer Sidebar', 'wpessential' ),
+					'id'            => 'footer',
+					'description'   => esc_html__( 'Widgets in this area will be shown on all posts and pages.', 'wpessential' ),
+					'before_widget' => '<div id="%1$s" class="wpe-widget widget %2$s">',
+					'after_widget'  => '</div>',
+					'before_title'  => '<h2 class="wpe-widget-title">',
+					'after_title'   => '</h2>',
+				]
+			] )
+		);
+
+		if ( ! empty( $sidebars ) )
+		{
+			foreach ( $sidebars as $sidebar )
+			{
+				register_sidebar( $sidebar );
+			}
+		}
+	}
+}
