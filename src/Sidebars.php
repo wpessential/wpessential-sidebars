@@ -19,6 +19,13 @@ final class Sidebars
 
 	public function add ( $args = [] )
 	{
+		$this->add_sidebars = array_push( $this->add_sidebars, $args );
+
+		return $this;
+	}
+
+	public function adds ( $args = [] )
+	{
 		$this->add_sidebars = array_merge( $this->add_sidebars, $args );
 
 		return $this;
@@ -27,6 +34,13 @@ final class Sidebars
 	public function remove ( $key = '' )
 	{
 		$this->remove_sidebars = array_push( $this->remove_sidebars, $key );
+
+		return $this;
+	}
+
+	public function removes ( $keyes = [] )
+	{
+		$this->remove_sidebars = array_merge( $this->remove_sidebars, $keyes );
 
 		return $this;
 	}
@@ -58,30 +72,29 @@ final class Sidebars
 			'wpe/library/sidebars_add',
 			array_merge( $this->add_sidebars, [
 				'main-sidebar'   => [
-					'name'          => esc_html__( 'WPEssential: Main Sidebar', 'wpessential' ),
-					'id'            => 'sidebar-1',
-					'description'   => esc_html__( 'Widgets in this area will be shown on all posts and pages.', 'wpessential' ),
-					'before_widget' => '<div id="%1$s" class="wpe-widget widget %2$s">',
-					'after_widget'  => '</div>',
-					'before_title'  => '<h2 class="wpe-widget-title">',
-					'after_title'   => '</h2>',
+					'name'        => esc_html__( 'WPEssential: Main Sidebar', 'wpessential' ),
+					'description' => esc_html__( 'Widgets in this area will be shown on all posts and pages.', 'wpessential' ),
+					'title_tag'   => 'h2',
 				],
 				'footer-sidebar' => [
-					'name'          => esc_html__( 'WPEssential: Footer Sidebar', 'wpessential' ),
-					'id'            => 'footer',
-					'description'   => esc_html__( 'Widgets in this area will be shown on all posts and pages.', 'wpessential' ),
-					'before_widget' => '<div id="%1$s" class="wpe-widget widget %2$s">',
-					'after_widget'  => '</div>',
-					'before_title'  => '<h2 class="wpe-widget-title">',
-					'after_title'   => '</h2>',
+					'name'        => esc_html__( 'WPEssential: Footer Sidebar', 'wpessential' ),
+					'description' => esc_html__( 'Widgets in this area will be shown on all posts and pages.', 'wpessential' ),
+					'title_tag'   => 'h2',
 				]
 			] )
 		);
 
 		if ( ! empty( $sidebars ) )
 		{
-			foreach ( $sidebars as $sidebar )
+			foreach ( $sidebars as $id => $sidebar )
 			{
+				$title_tag                  = $sidebar[ 'title_tag' ] ?? '';
+				$sidebar[ 'before_widget' ] = '<div id="%1$s" class="wpe-widget widget %2$s">';
+				$sidebar[ 'after_widget' ]  = '</div>';
+				$sidebar[ 'before_title' ]  = "<$title_tag class=\"wpe-widget-title\">";
+				$sidebar[ 'after_title' ]   = "</$title_tag>";
+				$sidebar[ 'id' ]            = $sidebar[ 'id' ] ?? $id;
+
 				register_sidebar( $sidebar );
 			}
 		}

@@ -1,35 +1,47 @@
-# wpessential-sidebars
-WPEssential Sidebars helping in registry of sidebars in WordPress.
+# WPEssential Sidebars
+Help to register the sidebars in WordPress.
 
 `composer require wpessential-sidebars`
 
-Add the menu to WordPress registry
+Add the single sidebar to WordPress registry
 
 ```php
-use WPEssential\Library\Sidebars;
-
-
-$sidebar = Sidebars::make();
+$sidebar = \WPEssential\Library\Sidebars::make();
 $sidebar->add([
-    'main-sidebar'   => [
+	'id'		=>'main-sidebar',
         'name'          => esc_html__( 'WPEssential: Main Sidebar', 'wpessential' ),
-        'id'            => 'sidebar-1',
         'description'   => esc_html__( 'Widgets in this area will be shown on all posts and pages.', 'wpessential' ),
-        'before_widget' => '<div id="%1$s" class="wpe-widget widget %2$s">',
-        'after_widget'  => '</div>',
-        'before_title'  => '<h2 class="wpe-widget-title">',
-        'after_title'   => '</h2>',
+        'title_tag' 	=> 'h2'
+]);
+$sidebar->init();
+```
+
+Add the multiple sidebars to WordPress registry
+
+```php
+$sidebar = \WPEssential\Library\Sidebars::make();
+$sidebar->adds([
+    	'main-sidebar'   => [
+        'name'          => esc_html__( 'WPEssential: Main Sidebar', 'wpessential' ),
+        'description'   => esc_html__( 'Widgets in this area will be shown on all posts and pages.', 'wpessential' ),
+        'title_tag' 	=> 'h2'
     ]
 ]);
 $sidebar->init();
 ```
 
-Remove the images from WordPress registry
+Remove the single sidebar from WordPress registry
 
 ```php
-use WPEssential\Library\Sidebars;
-
-$sidebar = Sidebars::make();
+$sidebar = \WPEssential\Library\Sidebars::make();
 $sidebar->remove('main-sidebar');
+$sidebar->init();
+```
+
+Remove the multiple sidebars from WordPress registry
+
+```php
+$sidebar = \WPEssential\Library\Sidebars::make();
+$sidebar->removes(['main-sidebar']);
 $sidebar->init();
 ```
