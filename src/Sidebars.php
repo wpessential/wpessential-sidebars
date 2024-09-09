@@ -9,8 +9,8 @@ if ( ! \defined( 'ABSPATH' ) && ! \defined( 'WPE_REG_SIDEBARS' ) )
 
 final class Sidebars
 {
-	protected $add_sidebars    = [];
-	protected $remove_sidebars = [];
+	private $add_sidebars    = [];
+	private $remove_sidebars = [];
 
 	public static function make ()
 	{
@@ -53,7 +53,7 @@ final class Sidebars
 		add_action( 'widgets_init', [ __CLASS__, 'register' ], 1000 );
 	}
 
-	public function unregister ()
+	private function unregister ()
 	{
 		$sidebars = apply_filters( 'wpe/library/sidebars_remove', array_merge( $this->remove_sidebars, [ '' ] ) );
 		if ( ! empty( $sidebars ) )
@@ -66,7 +66,7 @@ final class Sidebars
 		}
 	}
 
-	public function register ()
+	private function register ()
 	{
 		$sidebars = apply_filters(
 			'wpe/library/sidebars_add',
