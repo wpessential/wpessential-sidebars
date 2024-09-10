@@ -1,7 +1,7 @@
 # WPEssential Sidebars
 Help to register the sidebars in WordPress.
 
-`composer require wpessential-sidebars`
+`composer require wpessential/wpessential-sidebars`
 
 Add the single sidebar to WordPress registry
 
