@@ -1,6 +1,6 @@
 {
     "name": "wpessential/wpessential-sidebars",
-    "version" : "2.0.1",
+    "version" : "2.0.2",
     "description": "WPEssential Sidebars helping in registry of sidebars in WordPress.",
     "type": "library",
     "license": "GPL-3.0-or-later",
